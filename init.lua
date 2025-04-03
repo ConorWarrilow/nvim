@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -650,7 +650,8 @@ require('lazy').setup({
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
       require('mason-lspconfig').setup {
-        ensure_installed = { 'pyright', 'ruff_lsp' },
+        ensure_installed = { 'pyright' },
+        automatic_installation = true,
       }
       require('mason-lspconfig').setup {
         handlers = {
@@ -966,3 +967,14 @@ vim.keymap.set('n', '<Up>', ':resize -2<CR>')
 vim.keymap.set('n', '<Down>', ':resize +2<CR>')
 vim.keymap.set('n', '<Left>', ':vertical resize -2<CR>')
 vim.keymap.set('n', '<Right>', ':vertical resize +2<CR>')
+
+function GetVenv()
+  local venv = os.getenv 'VIRTUAL_ENV'
+  if venv then
+    return '[' .. vim.fn.fnamemodify(venv, ':t') .. ']'
+  else
+    return ''
+  end
+end
+
+vim.o.statusline = vim.o.statusline .. '%{v:lua.GetVenv()}'
